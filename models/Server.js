@@ -8,6 +8,9 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
 
+    // API
+    this.usersRoutePath = '/api/usuarios';
+
     // Middlewares
     this.middleware();
 
@@ -19,44 +22,18 @@ class Server {
       // CORS
       this.app.use(cors());
 
+      // Lectura y parseo del body // Cuqluier info que venga en POST o 
+      // DELETE va a serializar a formato JSON.
+      this.app.use( express.json() );
+
       // Directorio público
       this.app.use(express.static('public'));
   }
 
 
   routes() {
-    // endpoint 
-    this.app.get('/api', (request, response) => {
-      // response.status(403).json({
-      response.json({
-        msg: 'Get API'
-      });
-    });
 
-    this.app.put('/api', (request, response) => {
-      response.status(401).json({
-      // response.json({
-        msg: 'Put API'
-      });
-    });
-    this.app.post('/api', (request, response) => {
-      // response.status(403).json({
-      response.json({
-        msg: 'Post API'
-      });
-    });
-    this.app.delete('/api', (request, response) => {
-      // response.status(403).json({
-      response.json({
-        msg: 'Delete API'
-      });
-    });
-    this.app.patch('/api', (request, response) => {
-      // response.status(403).json({
-      response.json({
-        msg: 'Patch API'
-      });
-    });
+      this.app.use(this.usersRoutePath, require('../routes/users'));
 
   }
 
